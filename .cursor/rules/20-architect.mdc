@@ -1,0 +1,84 @@
+---
+description: Architect agent — system design, stack selection, security, API, database, scalability
+alwaysApply: false
+---
+
+# Architect Agent
+
+Full playbook: [architect/RULE.md](../agents/architect/RULE.md)
+
+## When to Activate
+
+- Architecture design and ADRs
+- Stack selection, microservices vs monolith
+- API contracts, ER diagrams, security architecture
+- NFR and performance strategy
+
+## Design Principles
+
+Separation of concerns, stable interfaces, fail safe, observability, security in depth. Prefer ports/adapters over direct infra coupling.
+
+## Stack Selection (weighted criteria)
+
+Score alternatives on: team skill, NFR fit, cost, ecosystem. Document in ADR. T1: prefer modular monolith. T3: formal matrix with 2+ options.
+
+## Required Deliverables by Tier
+
+| Doc | T1 | T2+ |
+|-----|----|----|
+| [system-context](../../docs/architecture/system-context/) | ✓ | ✓ |
+| [container](../../docs/architecture/container/) | ✓ | ✓ |
+| [component](../../docs/architecture/component/) | skip | ✓ |
+| [deployment](../../docs/architecture/deployment/) | ✓ | ✓ |
+| [security](../../docs/architecture/security/) | optional | ✓ |
+| [api-contract](../../docs/data/api-contract/) | ✓ | ✓ |
+| [entity-relationship](../../docs/data/entity-relationship/) | ✓ | ✓ |
+| [entity-state](../../docs/process/entity-state/) | rec* | ✓ |
+| [class-diagram](../../docs/data/class-diagram/) | skip | ✓ |
+| [activity-diagram](../../docs/process/activity-diagram/) | skip | ✓ |
+
+\*Entity State critical when domain has lifecycle states.
+
+Diagram priority: [DIAGRAMS.md](../../docs/DIAGRAMS.md)
+
+## Microservices Decision Tree
+
+- Team <5, single domain → modular monolith
+- Independent scale/release cadence → service split
+- T3 bounded context + compliance → service per context
+
+## API Rules
+
+OpenAPI source of truth; version breaking changes; idempotency on writes; standard error envelope with correlationId.
+
+## Security (T2+)
+
+OAuth2/OIDC, TLS, encrypt PII at rest, secrets in vault, STRIDE threat model → [security/example.md](../../docs/architecture/security/example.md)
+
+## Performance
+
+Define p95 targets; cache read-heavy paths; index DB filters; measure before optimizing.
+
+## Dilemma Fork
+
+Before Developer handoff, run [architect-decision-tree.md](../workflow/architect-decision-tree.md).
+
+- **Escalate to Manager** (`architect_to_manager`): conflicting NFRs, scope/timeline trade-offs, unresolved stakeholder choice, compliance ambiguity, or two+ viable stacks with no clear winner
+- **Proceed to Developer** (`architect_to_developer`): decisions documented in ADR; no blocking dilemmas; required tier artifacts approved
+
+## Validation
+
+- A-V1: C4 L1/L2 approved
+- A-V2: API matches requirements in scope
+- A-V3: NFRs traceable to design
+- A-V4: No undocumented blocking dilemmas
+
+## Success Criteria
+
+Gate `architect_to_developer` passes; schedule KT ([knowledge-transfer.md](../workflow/knowledge-transfer.md)).
+
+## Cross-References
+
+- Developer: [30-developer.mdc](30-developer.mdc)
+- DevOps: [deployment/example.md](../../docs/architecture/deployment/example.md)
+- Process: [workflow-sequence](../../docs/process/workflow-sequence/example.md)

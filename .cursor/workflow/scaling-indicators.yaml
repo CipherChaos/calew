@@ -1,0 +1,123 @@
+# Scaling Indicators — Project tier detection and documentation requirements
+# Used by all agents to skip or enforce blueprint sections
+
+version: "1.1.0"
+updated: "2026-06-20"
+
+tiers:
+  T1:
+    name: small
+    signals:
+      team_size_max: 3
+      duration_months_max: 3
+      deployable_units_max: 1
+      compliance_regulated: false
+    simplify:
+      skip_docs:
+        - docs/architecture/component/
+        - docs/architecture/network/
+        - docs/data/data-flow/
+        - docs/data/data-lifecycle/
+        - docs/data/data-mapping/
+        - docs/process/release-process/
+        - docs/process/incident-response/
+        - docs/process/change-management/
+        - docs/ux/user-journey/
+        - docs/ux/design-system/
+        - docs/ux/accessibility/
+        - docs/ux/usability-testing/
+        - docs/project-management/stakeholder-map/
+        - docs/process/activity-diagram/
+        - docs/data/class-diagram/
+      optional_docs:
+        - docs/ux/wireframes/  # minimal ASCII ok
+        - docs/process/entity-state/  # critical when stateful domain; optional otherwise
+      test_coverage_unit_min: 60
+      uat_formal: false
+      stakeholder_map_required: false
+
+  T2:
+    name: medium
+    signals:
+      team_size_min: 4
+      team_size_max: 10
+      multiple_services: true
+      compliance_regulated: false
+    simplify:
+      skip_docs: []
+      test_coverage_unit_min: 80
+      uat_formal: true
+      component_diagram_required: true
+
+  T3:
+    name: enterprise
+    signals:
+      team_size_min: 10
+      compliance_regulated: true
+      multi_region_or_ha_required: true
+    simplify:
+      skip_docs: []
+      test_coverage_unit_min: 85
+      uat_formal: true
+      all_architecture_docs_mandatory: true
+      security_architecture_mandatory: true
+      backup_verification_mandatory: true
+
+project_override:
+  name: "Acme Platform"
+  tier: T2
+  detected: "2026-06-20"
+  rationale: "Reference project for blueprint examples"
+
+detection_algorithm:
+  steps:
+    - id: count_team
+      action: Record active dev+qa+ops FTE on project
+    - id: count_duration
+      action: Estimate calendar months to MVP/production
+    - id: count_deployables
+      action: Count independently deployable services/apps
+    - id: check_compliance
+      action: Confirm regulated industry or contractual audit requirements
+    - id: assign_tier
+      rules:
+        - if: compliance_regulated == true OR team_size >= 10
+          then: T3
+        - if: team_size >= 4 OR multiple_services == true OR duration_months > 3
+          then: T2
+        - else: T1
+  output:
+    document: docs/project-management/project-charter/
+    field: tier_classification
+
+resource_allocation_by_tier:
+  manager_time_percent:
+    T1: 20
+    T2: 25
+    T3: 30
+  architect_time_percent:
+    T1: 15
+    T2: 20
+    T3: 25
+  qa_time_percent:
+    T1: 15
+    T2: 20
+    T3: 25
+  devops_time_percent:
+    T1: 10
+    T2: 15
+    T3: 20
+
+agent_activation:
+  T1:
+    always: [manager, developer]
+    phase_based: [architect, qa, devops]
+  T2:
+    always: [manager, architect, developer, qa, devops]
+  T3:
+    always: [manager, architect, developer, qa, devops]
+    additional_ceremony: [security_review, formal_uat, compliance_gate]
+
+quality_gate_overrides:
+  reference: quality-gates.yaml
+  note: Tier keys T1/T2/T3 in metrics.tests.unit_coverage_min apply automatically

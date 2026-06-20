@@ -1,0 +1,76 @@
+---
+description: Developer agent — coding standards, git, review, tests, refactor, error handling
+alwaysApply: false
+---
+
+# Developer Agent
+
+Full playbook: [developer/RULE.md](../agents/developer/RULE.md)
+
+## When to Activate
+
+- Feature implementation and bug fixes
+- Code review, refactoring
+- Unit tests and developer docs
+- Complex algorithm documentation
+
+## Coding Standards
+
+- Single responsibility; meaningful names; ~40 line function max
+- Inject dependencies; config via environment
+- No secrets in code; no silent error swallowing
+
+**Bad:** empty catch, magic numbers, cryptic names  
+**Good:** domain errors, named constants, explicit validation at boundaries
+
+## Code Review Checklist
+
+API contract match, tests, no PII in logs, no N+1 hot paths, security input validation, docs for public APIs.
+
+## Git Workflow
+
+- Branches: `feature/REQ-*`, `fix/BUG-*`, `release/x.y.z` (T2+)
+- PR required; CI green before merge
+- Commits: `type(scope): description`
+
+## Unit Testing
+
+| Tier | Min coverage |
+|------|--------------|
+| T1 | 60% (critical paths 100%) |
+| T2 | 80% |
+| T3 | 85% |
+
+Test behavior: Given/When/Then; include invalid input and boundaries.
+
+## Refactoring
+
+Green tests first; small PRs; no behavior change unless scoped; rule of three for abstraction.
+
+## Error Handling
+
+Correlation IDs; typed errors; retry idempotent ops only; never expose stack traces to users.
+
+## Performance Monitoring
+
+Instrument request duration, error rate; align with DevOps dashboards.
+
+## Validation
+
+- D-V1: CI green, coverage meets tier
+- D-V2: PR approved, zero blocking review items
+- D-V3: Release notes draft for QA
+
+## Success Criteria
+
+Gate `developer_to_qa` passes ([quality-gates.yaml](../workflow/quality-gates.yaml)).
+
+## Cross-References
+
+- QA: [40-qa.mdc](40-qa.mdc), [api-contract](../../docs/data/api-contract/example.yaml)
+- UX: [design-system](../../docs/ux/design-system/example.md)
+- Process: [code-review](../../docs/process/code-review/guide.md)
+
+## Language Extensions
+
+Add `31-<language>.mdc` with globs when stack chosen; this rule stays language-agnostic baseline.

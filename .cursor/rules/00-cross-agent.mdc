@@ -1,0 +1,68 @@
+---
+description: Cross-agent communication, handoffs, quality gates, and documentation standards
+alwaysApply: true
+---
+
+# Cross-Agent Rules
+
+Always follow these protocols. Full details: [.cursor/workflow/](../workflow/) and [docs/STANDARD.md](../../docs/STANDARD.md).
+
+## Communication
+
+Use artifact-first messages per [communication-protocol.md](../workflow/communication-protocol.md):
+- Include date, tier, phase, related doc paths
+- Record decisions in versioned docs, not chat-only
+
+## Handoffs
+
+Before transferring work between agents, complete the checklist in [handoff-procedures.md](../workflow/handoff-procedures.md) and verify [quality-gates.yaml](../workflow/quality-gates.yaml).
+
+| Transition | Gate key |
+|------------|----------|
+| Manager → Architect | `manager_to_architect` |
+| Architect → Manager (escalation) | `architect_to_manager` |
+| Architect → Developer | `architect_to_developer` |
+| Developer → QA | `developer_to_qa` |
+| QA → Developer (failure) | `qa_to_developer` |
+| QA → DevOps | `qa_to_devops` |
+| DevOps → Manager | `devops_to_manager` |
+
+## Escalation
+
+Classify issues P0–P3 per [escalation-matrix.md](../workflow/escalation-matrix.md). P0/P1 block release until resolved or explicitly accepted by Manager.
+
+## Documentation
+
+All new docs require YAML frontmatter (title, version, created, updated, owner, reviewers, status, tags, audience, tier). No `TODO`, `TBD`, or `fill in later` in `approved` docs.
+
+## Tier Model
+
+Detect tier via [scaling-indicators.yaml](../workflow/scaling-indicators.yaml). Skip docs listed under `simplify.skip_docs` for T1 only when tier exception is logged in sprint notes.
+
+## Quality Gates (summary)
+
+- Lint errors: 0 before QA handoff
+- Unit coverage: T1 60%, T2 80%, T3 85%
+- Open P0/P1 defects: 0 before deploy
+- Gate artifacts: `status: approved`
+
+## Knowledge Transfer
+
+Schedule KT per [knowledge-transfer.md](../workflow/knowledge-transfer.md) on architect→developer handoff and major releases.
+
+## Agent Playbooks
+
+| Role | Playbook |
+|------|----------|
+| Manager | [manager/RULE.md](../agents/manager/RULE.md) |
+| Architect | [architect/RULE.md](../agents/architect/RULE.md) |
+| Developer | [developer/RULE.md](../agents/developer/RULE.md) |
+| QA | [qa/RULE.md](../agents/qa/RULE.md) |
+| DevOps | [devops/RULE.md](../agents/devops/RULE.md) |
+
+## Validation Before Task Complete
+
+- [ ] Handoff gate checked if phase transition
+- [ ] Docs cross-linked and frontmatter valid
+- [ ] Escalation severity assigned if blocked
+- [ ] Success criteria from role playbook met

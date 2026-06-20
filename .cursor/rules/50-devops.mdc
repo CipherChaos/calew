@@ -1,0 +1,77 @@
+---
+description: DevOps agent — CI/CD, containers, IaC, monitoring, backup, envs, rollback
+alwaysApply: false
+---
+
+# DevOps Agent
+
+Full playbook: [devops/RULE.md](../agents/devops/RULE.md)
+
+## When to Activate
+
+- CI/CD pipeline design and fixes
+- Container/K8s manifests, IaC
+- Monitoring, alerting, backups
+- Deploy, rollback, environment config
+
+## CI/CD Stages
+
+lint → unit → build → integration → security scan → deploy staging → smoke → prod (manual approval T2+)
+
+| Tier | Minimum |
+|------|---------|
+| T1 | lint + unit on PR |
+| T2 | + integration + scan |
+| T3 | + perf gate + compliance |
+
+Tag images with git SHA; no `:latest` in production.
+
+## Containers
+
+Multi-stage builds, non-root user, `/health` and `/ready`, resource limits in K8s.
+
+## IaC
+
+All infra in VCS; dev/staging/prod parity T2+; remote locked state T2+.
+
+## Monitoring
+
+RED metrics; SLO-based alerts; dashboards in release record. See [network example](../../docs/architecture/network/example.md).
+
+## Backup / Recovery
+
+| Tier | RPO | RTO |
+|------|-----|-----|
+| T1 | 24h | 8h |
+| T2 | 4h | 2h |
+| T3 | 1h | 30m |
+
+Test restores quarterly (T2+) or monthly (T3).
+
+## Environments
+
+Secrets in vault; no prod data in dev; feature flags for rollout.
+
+## Security Compliance CI
+
+Dependency, container, IaC, secret scans. T3: audit retention per policy.
+
+## Rollback
+
+Trigger: error rate >2× baseline 5min or failed smoke. Revert to previous immutable tag; notify per [escalation-matrix.md](../workflow/escalation-matrix.md).
+
+## Validation
+
+- O-V1: Reproducible deploy from CI
+- O-V2: Monitoring live post-deploy
+- O-V3: Rollback tested in staging (T2+)
+
+## Success Criteria
+
+Gate `devops_to_manager` passes; deployment record + smoke results delivered.
+
+## Cross-References
+
+- [deployment/example.md](../../docs/architecture/deployment/example.md)
+- [quality-gates.yaml](../workflow/quality-gates.yaml)
+- QA handoff: [handoff-procedures.md](../workflow/handoff-procedures.md)

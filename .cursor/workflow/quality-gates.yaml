@@ -1,0 +1,215 @@
+# Quality Gates — Machine-readable thresholds for agent transitions
+# Reference: .cursor/workflow/handoff-procedures.md
+# Tier overrides: T1 (small), T2 (medium), T3 (enterprise)
+
+version: "1.0.0"
+updated: "2026-06-20"
+
+defaults:
+  tier: T2
+  doc_status_required: approved
+  allow_tier_exceptions: true  # Must be documented in sprint/release notes
+
+metrics:
+  code:
+    lint_errors_max: 0
+    blocking_review_items_max: 0
+  tests:
+    unit_coverage_min:
+      T1: 60
+      T2: 80
+      T3: 85
+    integration_coverage_min:
+      T1: 40
+      T2: 60
+      T3: 70
+  security:
+    critical_vulnerabilities_max: 0
+    high_vulnerabilities_max:
+      T1: 2  # with accepted risk doc
+      T2: 0
+      T3: 0
+  performance:
+    p95_latency_regression_max_percent: 10
+  documentation:
+    placeholder_patterns_forbidden:
+      - "TODO"
+      - "TBD"
+      - "fill in later"
+      - "PLACEHOLDER"
+
+transitions:
+  manager_to_architect:
+    description: Project initialized; architecture phase may begin
+    required_artifacts:
+      all_tiers:
+        - docs/project-management/project-charter/
+        - docs/project-management/risk-assessment/
+        - docs/project-management/glossary/
+        - docs/project-management/work-breakdown/
+      T2_plus:
+        - docs/project-management/stakeholder-map/
+    validations:
+      - charter_has_scope_and_success_criteria
+      - requirements_traceability_exists
+      - tier_documented
+    success_criteria:
+      - architect_acknowledges_handoff
+      - no_blocking_ambiguous_requirements
+
+  architect_to_manager:
+    description: Architecture dilemma requires Manager or stakeholder decision
+    type: escalation
+    blocking: false  # Non-related design work may continue
+    required_deliverables:
+      - dilemma_brief_with_two_plus_options
+      - trade_off_matrix_optional
+      - list_of_blocked_artifacts
+    validations:
+      - options_include_effort_and_risk
+      - manager_acknowledges_within_sla
+    success_criteria:
+      - decision_recorded_in_charter_or_adr
+      - architect_resumes_forward_handoff
+
+  architect_to_developer:
+    description: Design baseline ready for implementation
+    required_artifacts:
+      all_tiers:
+        - docs/architecture/system-context/
+        - docs/architecture/container/
+        - docs/architecture/deployment/
+        - docs/data/entity-relationship/
+        - docs/data/api-contract/
+      T2_plus:
+        - docs/architecture/component/
+        - docs/architecture/network/
+        - docs/architecture/security/
+        - docs/data/data-flow/
+      T3_only:
+        - docs/data/data-lifecycle/
+        - docs/data/data-mapping/
+    validations:
+      - nfr_documented
+      - api_contract_matches_stories_in_scope
+    success_criteria:
+      - developer_environment_documented
+      - adrs_for_major_decisions_or_n/a_logged
+    recommended_artifacts:
+      all_tiers:
+        - docs/process/workflow-sequence/
+        - docs/process/entity-state/
+      T2_plus:
+        - docs/data/class-diagram/
+        - docs/process/activity-diagram/
+
+  developer_to_qa:
+    description: Feature complete on integration branch
+    required_artifacts:
+      all_tiers:
+        - release_notes_draft
+    code_quality:
+      lint_errors: 0
+      blocking_review_items: 0
+    tests:
+      unit_coverage_min_by_tier: true
+      ci_pipeline_green: true
+    validations:
+      - known_limitations_documented
+      - complex_logic_has_algorithm_flow_if_applicable
+    success_criteria:
+      - qa_test_environment_available
+      - test_data_seeded
+
+  qa_to_developer:
+    description: Test failure or acceptance criteria miss; return to Developer
+    type: reverse
+    trigger_conditions:
+      - open_p0_or_p1_defect
+      - acceptance_criteria_not_met
+      - regression_on_p1_path
+    required_deliverables:
+      - bug_report_with_repro_steps
+      - expected_vs_actual
+      - severity_and_req_id
+      - environment_and_correlation_id
+    validations:
+      - each_blocking_defect_has_bug_id
+    success_criteria:
+      - developer_acknowledges_receipt
+      - fix_retest_cycle_scheduled
+
+  qa_to_devops:
+    description: Release candidate validated
+    required_artifacts:
+      all_tiers:
+        - test_execution_report
+        - regression_report
+      T2_plus:
+        - security_checklist_complete
+        - uat_sign_off
+      T3_only:
+        - performance_test_report
+        - formal_uat_minutes
+    defect_policy:
+      open_p0_max: 0
+      open_p1_max: 0
+      open_p2_max:
+        T1: 5
+        T2: 3
+        T3: 0
+    validations:
+      - rollback_plan_documented
+      - secrets_config_checklist_complete
+    success_criteria:
+      - release_candidate_tagged
+      - devops_runbook_updated
+
+  devops_to_manager:
+    description: Release deployed and observable
+    required_artifacts:
+      all_tiers:
+        - deployment_record
+        - smoke_test_results
+      T2_plus:
+        - monitoring_dashboard_links
+      T3_only:
+        - backup_verification_record
+        - compliance_sign_off
+    validations:
+      - post_deploy_smoke_pass
+      - incident_runbook_updated_if_needed
+    success_criteria:
+      - stakeholder_release_comms_sent
+      - retrospective_scheduled
+
+documentation_completeness:
+  checks:
+    - frontmatter_present
+    - status_approved_for_gate_artifacts
+    - related_links_resolve
+    - tier_tag_matches_project
+  sample_paths_to_verify:
+    - docs/INDEX.md
+    - docs/architecture/system-context/example.md
+
+performance_benchmarks:
+  sla_examples:
+    api_availability_monthly:
+      T1: 99.0
+      T2: 99.5
+      T3: 99.9
+    api_p95_ms:
+      T1: 500
+      T2: 300
+      T3: 200
+
+security_compliance:
+  T2_plus:
+    - dependency_scan_in_ci
+    - secrets_not_in_repo
+    - auth_documented_in_security_architecture
+  T3_only:
+    - penetration_test_annual
+    - audit_log_retention_defined
+    - data_classification_documented

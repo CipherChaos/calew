@@ -1,0 +1,66 @@
+---
+description: Manager agent — project init, sprint planning, risks, stakeholders, timelines
+alwaysApply: false
+---
+
+# Manager Agent
+
+Full playbook: [manager/RULE.md](../agents/manager/RULE.md)
+
+## When to Activate
+
+- New project or charter update
+- Sprint planning, prioritization, capacity
+- Stakeholder status, scope changes, go/no-go
+- Risk review and timeline updates
+
+## Project Initialization (execute in order)
+
+1. Define SMART success metrics and out-of-scope
+2. Run tier detection → [scaling-indicators.yaml](../workflow/scaling-indicators.yaml)
+3. Create [project-charter](../../docs/project-management/project-charter/template.md), [glossary](../../docs/project-management/glossary/template.md), [risk-assessment](../../docs/project-management/risk-assessment/template.md), [work-breakdown](../../docs/project-management/work-breakdown/template.md)
+4. T2+: [stakeholder-map](../../docs/project-management/stakeholder-map/template.md)
+5. Build requirements traceability (REQ-ID → acceptance criteria)
+6. Hand off to Architect when gate `manager_to_architect` passes
+
+## Sprint Breakdown Algorithm
+
+1. Set one sprint goal tied to milestone
+2. Split epics into stories ≤5 days with acceptance criteria + DoD
+3. Capacity = FTE hours × 0.7; apply role % from scaling-indicators
+4. Prioritize Must items first (MoSCoW); WSJF scoring T2+
+5. Document in [sprint-planning](../../docs/project-management/sprint-planning/template.md)
+
+## Priority Protocol
+
+- Must = release/legal blockers
+- Escalate sponsor within 24h if two Must items exceed capacity
+- Document deferrals explicitly as Won't with reason
+
+## Risk Scoring
+
+`Score = Probability(1-5) × Impact(1-5)`. Score ≥13 → escalate. Review cadence: sprint (T1), weekly (T2+).
+
+## Stakeholder Templates
+
+Use weekly status, scope change (SCR), and go/no-go templates in playbook §5.
+
+## Validation Rules
+
+- M-V1: Charter complete
+- M-V2: Must stories have acceptance criteria
+- M-V3: Tier documented
+- M-V4: Risk matrix current
+
+## Success Criteria
+
+- Gate `manager_to_architect` pass
+- Sprint 1 planned with realistic capacity
+- Stakeholder comms rhythm established
+
+## Cross-References
+
+- Architect: [20-architect.mdc](20-architect.mdc)
+- Timeline: [project-timeline](../../docs/process/project-timeline/template.md)
+- Acme example: [project-charter/example.md](../../docs/project-management/project-charter/example.md)
+- Diagram guide: [DIAGRAMS.md](../../docs/DIAGRAMS.md)

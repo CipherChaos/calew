@@ -1,0 +1,86 @@
+# --- Obsidian (local vault UI/state) ---
+.obsidian/
+
+# --- OS ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Editors / IDEs (local settings; keep shared .cursor/ in repo) ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# --- Cursor (local-only; rules and agents are tracked) ---
+.cursor/plans/
+.cursor/**/*.log
+
+# --- Python (scripts/generate_docs.py) ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.env/
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# --- Node (if tooling is added later) ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# --- Secrets and credentials ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials.json
+secrets.yaml
+secrets.yml
+
+# --- Logs and temp ---
+*.log
+logs/
+tmp/
+temp/
+.cache/
+*.tmp
+*.bak
+
+# --- Archives (local copies, not blueprint content) ---
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+
+# --- Local project overrides (teams bootstrap their own) ---
+project_override.local.yaml
+scaling.local.yaml

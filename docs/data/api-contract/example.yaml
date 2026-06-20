@@ -1,0 +1,102 @@
+---
+title: API Contract (OpenAPI) (Example)
+version: 1.0.0
+created: 2026-06-20
+updated: 2026-06-20
+owner: architect
+reviewers: [developer, qa]
+status: approved
+tags: [data, api, openapi]
+audience: [developers, qa]
+tier: T1
+related:
+  - ../entity-relationship/example.md
+  - ../../architecture/container/example.md
+---
+
+openapi: 3.1.0
+info:
+  title: Acme Order API
+  version: 1.0.0
+  description: B2B order management for Acme Platform
+servers:
+  - url: https://api.acme.example/v1
+paths:
+  /orders:
+    post:
+      summary: Create order
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Validation error
+  /orders/{orderId}:
+    get:
+      summary: Get order by ID
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+components:
+  schemas:
+    CreateOrderRequest:
+      type: object
+      required: [customerId, lines]
+      properties:
+        customerId:
+          type: string
+          format: uuid
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineInput'
+    OrderLineInput:
+      type: object
+      required: [productId, quantity]
+      properties:
+        productId:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          minimum: 1
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [PENDING, CONFIRMED, SHIPPED, CANCELLED]
+        customerId:
+          type: string
+          format: uuid
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineInput'
+        createdAt:
+          type: string
+          format: date-time
