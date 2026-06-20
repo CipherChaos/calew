@@ -1,21 +1,37 @@
 # Cursor Agent Workflow Index
 
-Navigable map of agent rules, playbooks, and workflow artifacts.
+Navigable map of agent rules, playbooks, CALEW skills, and workflow artifacts.
 
-**Blueprint version:** 1.0.0
+**Blueprint version:** 1.2.0
+
+---
+
+## CALEW Orchestration (v1)
+
+| Resource | Path | Purpose |
+|----------|------|---------|
+| Command cheat sheet | [SKILLS.md](../SKILLS.md) | Human quick reference |
+| Architecture | [CALEW_ARCHITECTURE.md](../CALEW_ARCHITECTURE.md) | System design and v1 boundaries |
+| Router skill | [skills/calew-router/SKILL.md](skills/calew-router/SKILL.md) | Command alias resolution |
+| Talk-to skill | [skills/calew-talk-to/SKILL.md](skills/calew-talk-to/SKILL.md) | Consultation without ownership change |
+| Handoff skill | [skills/calew-handoff/SKILL.md](skills/calew-handoff/SKILL.md) | Formal gate-validated transfer |
+| Status skill | [skills/calew-status/SKILL.md](skills/calew-status/SKILL.md) | `/calew-status`, `/gate-check`, reporting |
+| Session state | [session/state.yaml](session/state.yaml) | Active agent, phase, gates |
+| Project config | [config/project.yaml](config/project.yaml) | Team overrides |
+| Gate checker | [../scripts/gate-check.py](../scripts/gate-check.py) | Artifact validation script |
 
 ---
 
 ## Rules (Executable)
 
-| File | Always apply | Invoke when |
-|------|--------------|-------------|
-| [rules/00-cross-agent.mdc](rules/00-cross-agent.mdc) | Yes | Every session |
-| [rules/10-manager.mdc](rules/10-manager.mdc) | No | Planning, sprints, stakeholders, risks |
-| [rules/20-architect.mdc](rules/20-architect.mdc) | No | Design, stack, architecture docs |
-| [rules/30-developer.mdc](rules/30-developer.mdc) | No | Coding, review, refactor |
-| [rules/40-qa.mdc](rules/40-qa.mdc) | No | Testing, bugs, UAT |
-| [rules/50-devops.mdc](rules/50-devops.mdc) | No | CI/CD, infra, deploy |
+| File | CALEW alias | Always apply | Invoke when |
+|------|-------------|--------------|-------------|
+| [rules/00-cross-agent.mdc](rules/00-cross-agent.mdc) | — | Yes | Every session |
+| [rules/10-manager.mdc](rules/10-manager.mdc) | `/hey-manager` | No | Planning, sprints, stakeholders, risks |
+| [rules/20-architect.mdc](rules/20-architect.mdc) | `/hey-architect` | No | Design, stack, architecture docs |
+| [rules/30-developer.mdc](rules/30-developer.mdc) | `/hey-developer` | No | Coding, review, refactor |
+| [rules/40-qa.mdc](rules/40-qa.mdc) | `/hey-qa`, `/hey-tester` | No | Testing, bugs, UAT |
+| [rules/50-devops.mdc](rules/50-devops.mdc) | `/hey-devops` | No | CI/CD, infra, deploy |
 
 ---
 
@@ -37,6 +53,7 @@ Agent overview: [agents/README.md](agents/README.md)
 
 | File | Type | Purpose |
 |------|------|---------|
+| [workflow/consultation-protocol.md](workflow/consultation-protocol.md) | Process | `/talk-to` rules |
 | [workflow/communication-protocol.md](workflow/communication-protocol.md) | Process | Message formats, async norms |
 | [workflow/handoff-procedures.md](workflow/handoff-procedures.md) | Process | Agent transition checklists |
 | [workflow/escalation-matrix.md](workflow/escalation-matrix.md) | Process | Severity and escalation paths |
@@ -59,6 +76,8 @@ Agent overview: [agents/README.md](agents/README.md)
 | QA → DevOps | `qa_to_devops` |
 | DevOps → Manager | `devops_to_manager` |
 
+Validate: `/gate-check [gate_key]` or `python scripts/gate-check.py [gate_key]`
+
 ---
 
 ## Phase → Agent Map
@@ -76,6 +95,7 @@ Agent overview: [agents/README.md](agents/README.md)
 ## Related
 
 - [HELP.md](../HELP.md) — Agent diagrams and onboarding
+- [SKILLS.md](../SKILLS.md) — CALEW command reference
 - [BOOTSTRAP.md](../BOOTSTRAP.md) — AI project setup
 - [docs/INDEX.md](../docs/INDEX.md) — Documentation catalog
 - [docs/RELATIONSHIPS.md](../docs/RELATIONSHIPS.md) — Doc dependency graph

@@ -2,7 +2,7 @@
 
 Production-ready template for multi-agent software development with Cursor AI. Teams use this repository so their AI can generate a tailored `.cursor/` folder with consistent agent rules, quality gates, and documentation standards.
 
-**Blueprint version:** 1.1.0  
+**Blueprint version:** 1.2.0  
 **Last updated:** 2026-06-20
 
 ---
@@ -12,6 +12,8 @@ Production-ready template for multi-agent software development with Cursor AI. T
 | Document | Audience | Purpose |
 |----------|----------|---------|
 | **[HELP.md](HELP.md)** | Humans and AIs | Agent diagrams, lifecycle, how to invoke each role |
+| **[SKILLS.md](SKILLS.md)** | Humans | CALEW command cheat sheet (`/hey-*`, `/talk-to`, `/handoff-to`) |
+| **[CALEW_ARCHITECTURE.md](CALEW_ARCHITECTURE.md)** | Leads and AIs | Orchestration layer design and v1 boundaries |
 | **[BOOTSTRAP.md](BOOTSTRAP.md)** | AIs | Intake checklist and prompt to scaffold a new project |
 | **[AGENTS.md](AGENTS.md)** | Cursor | Quick agent reference |
 
@@ -21,6 +23,7 @@ Production-ready template for multi-agent software development with Cursor AI. T
 
 | Pillar | Location | Purpose |
 |--------|----------|---------|
+| CALEW orchestration | [SKILLS.md](SKILLS.md), [`.cursor/skills/`](.cursor/skills/) | Command aliases, session, consultation, handoff |
 | Agent workflow | [`.cursor/`](.cursor/) | Role-based rules (`.mdc`), playbooks, handoffs, quality gates |
 | Documentation | [`docs/`](docs/) | Architecture, process, data, UX, and PM templates with examples |
 | Standards | [`docs/STANDARD.md`](docs/STANDARD.md) | Metadata, versioning, review workflow for all documents |
@@ -32,7 +35,7 @@ Production-ready template for multi-agent software development with Cursor AI. T
 1. Open [BOOTSTRAP.md](BOOTSTRAP.md) and paste the bootstrap prompt into Cursor Agent mode
 2. Answer the intake checklist (project name, tier, stack, deployment)
 3. AI generates `.cursor/` and scaffolds tier-appropriate `docs/`
-4. Invoke `@10-manager` to create the project charter and plan Sprint 1
+4. Invoke `@10-manager` or `/hey-manager` to create the project charter and plan Sprint 1
 
 **Alternative:** Copy the entire repo and replace Acme examples manually.
 
@@ -40,13 +43,14 @@ Production-ready template for multi-agent software development with Cursor AI. T
 
 ## Agent Roles
 
-| Agent | Rule file | Playbook | Primary phase |
-|-------|-----------|----------|---------------|
-| Manager | [10-manager.mdc](.cursor/rules/10-manager.mdc) | [agents/manager/RULE.md](.cursor/agents/manager/RULE.md) | Init, planning, stakeholder comms |
-| Architect | [20-architect.mdc](.cursor/rules/20-architect.mdc) | [agents/architect/RULE.md](.cursor/agents/architect/RULE.md) | Design, stack, security architecture |
-| Developer | [30-developer.mdc](.cursor/rules/30-developer.mdc) | [agents/developer/RULE.md](.cursor/agents/developer/RULE.md) | Implementation, review, refactor |
-| QA | [40-qa.mdc](.cursor/rules/40-qa.mdc) | [agents/qa/RULE.md](.cursor/agents/qa/RULE.md) | Testing, bug triage, UAT |
-| DevOps | [50-devops.mdc](.cursor/rules/50-devops.mdc) | [agents/devops/RULE.md](.cursor/agents/devops/RULE.md) | CI/CD, infra, deployment |
+| Agent | Rule file | CALEW | Playbook | Primary phase |
+|-------|-----------|-------|----------|---------------|
+| Manager | [10-manager.mdc](.cursor/rules/10-manager.mdc) | `/hey-manager` | [agents/manager/RULE.md](.cursor/agents/manager/RULE.md) | Init, planning, stakeholder comms |
+| Architect | [20-architect.mdc](.cursor/rules/20-architect.mdc) | `/hey-architect` | [agents/architect/RULE.md](.cursor/agents/architect/RULE.md) | Design, stack, security architecture |
+| Developer | [30-developer.mdc](.cursor/rules/30-developer.mdc) | `/hey-developer` | [agents/developer/RULE.md](.cursor/agents/developer/RULE.md) | Implementation, review, refactor |
+| QA | [40-qa.mdc](.cursor/rules/40-qa.mdc) | `/hey-qa` | [agents/qa/RULE.md](.cursor/agents/qa/RULE.md) | Testing, bug triage, UAT |
+| Tester (alias) | [40-qa.mdc](.cursor/rules/40-qa.mdc) | `/hey-tester` | execute-only mode | Run existing tests |
+| DevOps | [50-devops.mdc](.cursor/rules/50-devops.mdc) | `/hey-devops` | [agents/devops/RULE.md](.cursor/agents/devops/RULE.md) | CI/CD, infra, deployment |
 
 Cross-agent rules always apply: [00-cross-agent.mdc](.cursor/rules/00-cross-agent.mdc).
 

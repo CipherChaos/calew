@@ -6,15 +6,18 @@ Five specialized agents orchestrate the software lifecycle. Each has an executab
 
 ## Role Selection Guide
 
-| You need to… | Invoke |
-|--------------|--------|
-| Init project, plan sprint, manage risks/stakeholders | **Manager** — `@10-manager` |
-| Design system, choose stack, define APIs/DB | **Architect** — `@20-architect` |
-| Implement features, review code, refactor | **Developer** — `@30-developer` |
-| Plan tests, file bugs, run UAT | **QA** — `@40-qa` |
-| CI/CD, infra, deploy, monitor | **DevOps** — `@50-devops` |
+| You need to… | Invoke | CALEW |
+|--------------|--------|-------|
+| Init project, plan sprint, manage risks/stakeholders | **Manager** — `@10-manager` | `/hey-manager` |
+| Design system, choose stack, define APIs/DB | **Architect** — `@20-architect` | `/hey-architect` |
+| Implement features, review code, refactor | **Developer** — `@30-developer` | `/hey-developer` |
+| Plan tests, file bugs, run UAT | **QA** — `@40-qa` | `/hey-qa` |
+| Run existing tests only | **Tester alias** — `@40-qa` | `/hey-tester` |
+| CI/CD, infra, deploy, monitor | **DevOps** — `@50-devops` | `/hey-devops` |
 
 Cross-agent behavior always applies via `00-cross-agent.mdc`.
+
+**CALEW commands:** [SKILLS.md](../../SKILLS.md) — `/talk-to`, `/handoff-to`, `/calew-status`
 
 **Full guide with diagrams:** [HELP.md](../../HELP.md)
 

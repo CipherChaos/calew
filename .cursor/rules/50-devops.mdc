@@ -7,6 +7,22 @@ alwaysApply: false
 
 Full playbook: [devops/RULE.md](../agents/devops/RULE.md)
 
+## CALEW Commands
+
+When user types `/hey-devops`, adopt this persona. Equivalent to `@50-devops`.
+
+| Skill | Purpose |
+|-------|---------|
+| `/set-mode on\|off` | Toggle deployment readiness |
+| `/build-project` | CI/local build |
+| `/refactor-build` | Pipeline, Docker, IaC improvements |
+| `/deploy staging\|prod` | Release deployment (prod requires human approval) |
+| `/smoke-test` | Post-deployment verification |
+| `/rollback` | Incident response |
+| `/brain-storming-with-architect` | Tooling/stack discussions |
+
+Default: inactive until release phase. Validate build before deployment.
+
 ## When to Activate
 
 - CI/CD pipeline design and fixes

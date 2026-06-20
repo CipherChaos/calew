@@ -1,0 +1,14 @@
+# Project configuration — customize per team; referenced by BOOTSTRAP and CALEW skills
+
+name: Acme Platform
+tier: T2
+stack: {}
+deploy_target: null
+
+calew:
+  command_aliases_enabled: true
+  production_deploy_requires_approval: true
+
+project_override:
+  detected: "2026-06-20"
+  rationale: "Blueprint default — replace when bootstrapping a new project"

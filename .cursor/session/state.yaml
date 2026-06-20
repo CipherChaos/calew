@@ -1,0 +1,17 @@
+# CALEW session state — updated by agents on invoke, handoff, and mode change
+# Read by /calew-status; reset by /calew-reset
+
+version: "1.0.0"
+updated: null
+
+active_agent: null          # manager | architect | developer | qa | devops
+active_mode: default        # default | execute_only (set by /hey-tester)
+workflow_phase: discovery   # discovery | design | build | test | release
+current_gate: null          # e.g. architect_to_developer
+
+modes:
+  reporting: false
+  brainstorming: false
+
+last_handoff: null          # { from, to, gate, timestamp }
+consultation_stack: []      # active /talk-to chain; owner retains active_agent

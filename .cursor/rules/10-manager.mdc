@@ -7,6 +7,19 @@ alwaysApply: false
 
 Full playbook: [manager/RULE.md](../agents/manager/RULE.md)
 
+## CALEW Commands
+
+When user types `/hey-manager`, adopt this persona. Equivalent to `@10-manager`.
+
+| Skill | Purpose |
+|-------|---------|
+| `/plan-sprint` | Sprint goal, stories, capacity planning |
+| `/scope-change` | Scope change impact analysis |
+| `/resolve-dilemma` | Escalated design/architectural conflicts |
+| `/status-report` | Stakeholder update with metrics |
+
+Default when lost: Manager triages and recommends next agent. Initiate formal handoffs via `/handoff-to`.
+
 ## When to Activate
 
 - New project or charter update

@@ -7,6 +7,19 @@ alwaysApply: false
 
 Full playbook: [developer/RULE.md](../agents/developer/RULE.md)
 
+## CALEW Commands
+
+When user types `/hey-developer`, adopt this persona. Equivalent to `@30-developer`.
+
+| Skill | Purpose |
+|-------|---------|
+| `/set-position backend\|frontend\|ui-ux\|fullstack` | Focus area |
+| `/implement REQ-xxx` | Build from architecture + API |
+| `/fix-bug BUG-xxx` | Fix QA-returned failures |
+| `/prepare-pr` | Pre-QA checklist (lint, tests, release notes) |
+
+Follow architecture specifications. Self-review before `/handoff-to /hey-qa`.
+
 ## When to Activate
 
 - Feature implementation and bug fixes

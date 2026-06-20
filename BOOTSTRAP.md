@@ -64,6 +64,15 @@ Copy from blueprint to target repo:
 ```
 .cursor/
 ├── INDEX.md
+├── config/
+│   └── project.yaml            # Team overrides, CALEW settings
+├── session/
+│   └── state.yaml              # CALEW session state
+├── skills/
+│   ├── calew-router/SKILL.md
+│   ├── calew-talk-to/SKILL.md
+│   ├── calew-handoff/SKILL.md
+│   └── calew-status/SKILL.md
 ├── rules/
 │   ├── 00-cross-agent.mdc      # alwaysApply: true
 │   ├── 10-manager.mdc
@@ -80,6 +89,7 @@ Copy from blueprint to target repo:
 │   └── devops/RULE.md
 └── workflow/
     ├── communication-protocol.md
+    ├── consultation-protocol.md
     ├── handoff-procedures.md
     ├── escalation-matrix.md
     ├── knowledge-transfer.md
@@ -92,6 +102,7 @@ Copy from blueprint to target repo:
 
 - Replace all `Acme Platform` / `Acme` with project name
 - Update `.cursor/INDEX.md` and `agents/README.md` reference project
+- Update [`.cursor/config/project.yaml`](.cursor/config/project.yaml) with project name and tier
 - Set tier override in `scaling-indicators.yaml`:
 
 ```yaml
@@ -148,6 +159,7 @@ Hand off to Manager:
 
 ```
 @10-manager Initialize this project using the charter template.
+# Or: /hey-manager Initialize this project using the charter template.
 Tier: [T1/T2/T3]
 Domain: [description]
 Success metrics: [list]
@@ -175,13 +187,13 @@ INTAKE ANSWERS:
 - Testing: [tools]
 
 TASKS:
-1. Create .cursor/ with all rules, playbooks, and workflow files from the blueprint
+1. Create .cursor/ with all rules, playbooks, skills, session, config, and workflow files from the blueprint
 2. Replace Acme Platform with [NAME] in customized files
-3. Set tier in scaling-indicators.yaml with rationale
+3. Set tier in scaling-indicators.yaml and project.yaml with rationale
 4. Add optional stack rule if stack specified
 5. Scaffold docs/ folders from templates for the detected tier
 6. Create initial project-charter draft from template
-7. Report completion and invoke @10-manager for next steps
+7. Report completion and invoke @10-manager or /hey-manager for next steps
 
 Do not leave TODO or TBD in any file marked status: approved.
 Follow docs/STANDARD.md for frontmatter on all docs.
@@ -193,9 +205,10 @@ Follow docs/STANDARD.md for frontmatter on all docs.
 
 - [ ] All 7 gate keys present in quality-gates.yaml and handoff-procedures.md
 - [ ] `00-cross-agent.mdc` has `alwaysApply: true`
+- [ ] CALEW skills, session/state.yaml, and config/project.yaml present
 - [ ] Tier documented with rationale
 - [ ] At least charter template exists in docs/
-- [ ] HELP.md or pointer created in target repo README
+- [ ] HELP.md, SKILLS.md or pointer created in target repo README
 - [ ] No secrets or credentials in generated files
 
 ---
@@ -206,5 +219,5 @@ Follow docs/STANDARD.md for frontmatter on all docs.
 |-------|-----|
 | Rules not loading | Ensure `.cursor/rules/*.mdc` exist; restart Cursor |
 | Wrong tier ceremony | Re-run scaling-indicators; log exception in sprint notes |
-| Agent confused about handoff | Point to HELP.md lifecycle diagram |
+| Agent confused about handoff | Point to HELP.md lifecycle diagram or SKILLS.md |
 | Too many docs for T1 | Apply skip list in scaling-indicators.yaml |

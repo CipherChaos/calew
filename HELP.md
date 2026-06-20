@@ -1,10 +1,12 @@
 # Agentic Workflow — Help Guide
 
-**Blueprint version:** 1.0.0  
+**Blueprint version:** 1.2.0  
 **Date:** 2026-06-20  
 **Audience:** Teams and AIs setting up agentic/loop engineering with Cursor
 
 This repository is a **blueprint** for multi-agent software development. Five specialized agents work in sequence with explicit handoffs, quality gates, and reverse loops when work fails or needs escalation.
+
+**CALEW orchestration:** Use [SKILLS.md](SKILLS.md) for command cheat sheet (`/hey-manager`, `/talk-to`, `/handoff-to`). Architecture: [CALEW_ARCHITECTURE.md](CALEW_ARCHITECTURE.md).
 
 ---
 
@@ -12,7 +14,8 @@ This repository is a **blueprint** for multi-agent software development. Five sp
 
 | Pillar | Location | Purpose |
 |--------|----------|---------|
-| Agent rules | [`.cursor/rules/`](.cursor/rules/) | Executable Cursor rules — invoke with `@10-manager`, etc. |
+| Agent rules | [`.cursor/rules/`](.cursor/rules/) | Executable Cursor rules — invoke with `@10-manager` or `/hey-manager` |
+| CALEW skills | [`.cursor/skills/`](.cursor/skills/) | Command routing, consultation, handoff, status |
 | Playbooks | [`.cursor/agents/`](.cursor/agents/) | Comprehensive procedures per role |
 | Workflow | [`.cursor/workflow/`](.cursor/workflow/) | Handoffs, gates, escalation, communication |
 | Documentation | [`docs/`](docs/) | Templates, examples, guides for all deliverables |
@@ -39,13 +42,14 @@ flowchart TB
   O -->|"Deployed system"| M
 ```
 
-| Agent | Invoke | Responsibility | Key outputs |
-|-------|--------|----------------|-------------|
-| **Manager** | `@10-manager` | Plans, prioritizes, manages risks and stakeholders | Charter, sprint plan, risk matrix |
-| **Architect** | `@20-architect` | Designs system, diagrams, APIs, stack | C4 diagrams, OpenAPI, ERD, ADRs |
-| **Developer** | `@30-developer` | Implements features per architecture | Code, unit tests, CI green |
-| **QA** | `@40-qa` | Tests application; files bugs or approves release | Test reports, bug reports, UAT sign-off |
-| **DevOps** | `@50-devops` | Deploys, monitors, manages infra | Deployment record, monitoring, rollback |
+| Agent | Invoke | CALEW alias | Responsibility | Key outputs |
+|-------|--------|-------------|----------------|-------------|
+| **Manager** | `@10-manager` | `/hey-manager` | Plans, prioritizes, manages risks and stakeholders | Charter, sprint plan, risk matrix |
+| **Architect** | `@20-architect` | `/hey-architect` | Designs system, diagrams, APIs, stack | C4 diagrams, OpenAPI, ERD, ADRs |
+| **Developer** | `@30-developer` | `/hey-developer` | Implements features per architecture | Code, unit tests, CI green |
+| **QA** | `@40-qa` | `/hey-qa` | Tests application; files bugs or approves release | Test reports, bug reports, UAT sign-off |
+| **Tester** | `@40-qa` | `/hey-tester` | Execute existing tests only | Test execution report |
+| **DevOps** | `@50-devops` | `/hey-devops` | Deploys, monitors, manages infra | Deployment record, monitoring, rollback |
 
 Cross-agent behavior always applies via [`00-cross-agent.mdc`](.cursor/rules/00-cross-agent.mdc).
 
@@ -79,7 +83,21 @@ flowchart LR
 | Architect → Manager | Blocking design dilemma (conflicting NFRs, stack choice, compliance) | Manager decides with stakeholders; Architect resumes |
 | QA → Developer | P0/P1 failure or acceptance criteria miss | Developer fixes; QA re-tests |
 
-Details: [architect-decision-tree.md](.cursor/workflow/architect-decision-tree.md), [handoff-procedures.md](.cursor/workflow/handoff-procedures.md)
+Details: [architect-decision-tree.md](.cursor/workflow/architect-decision-tree.md), [handoff-procedures.md](.cursor/workflow/handoff-procedures.md), [consultation-protocol.md](.cursor/workflow/consultation-protocol.md)
+
+---
+
+## CALEW Commands (Orchestration Layer)
+
+CALEW adds teachable commands on top of `@` rule invocation. Full reference: [SKILLS.md](SKILLS.md).
+
+| Interaction | Command | Ownership |
+|-------------|---------|-----------|
+| Invoke | `/hey-{agent}` | Agent takes work |
+| Consult | `/talk-to` | Owner keeps work |
+| Transfer | `/handoff-to` | Passes after gate pass |
+
+Session state: [`.cursor/session/state.yaml`](.cursor/session/state.yaml). Check position: `/calew-status`.
 
 ---
 
@@ -142,6 +160,8 @@ All examples use **Acme Platform** — a B2B order management SaaS. Trace one fe
 
 | Resource | Path |
 |----------|------|
+| CALEW commands | [SKILLS.md](SKILLS.md) |
+| CALEW architecture | [CALEW_ARCHITECTURE.md](CALEW_ARCHITECTURE.md) |
 | Repository README | [README.md](README.md) |
 | AI bootstrap | [BOOTSTRAP.md](BOOTSTRAP.md) |
 | Cursor index | [.cursor/INDEX.md](.cursor/INDEX.md) |
@@ -158,4 +178,4 @@ All examples use **Acme Platform** — a B2B order management SaaS. Trace one fe
 
 **Existing team onboarding:** Read this file, then invoke `@10-manager` with your project context.
 
-**Rule invocation:** In Cursor chat, type `@10-manager` (or 20, 30, 40, 50) to activate that agent's rule for the session.
+**Rule invocation:** In Cursor chat, type `@10-manager` (or 20, 30, 40, 50) or CALEW alias `/hey-manager` to activate that agent's rule for the session.

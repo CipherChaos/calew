@@ -17,6 +17,26 @@ All notable changes to the Project Workflow Blueprint follow [Semantic Versionin
 - Blueprint standard: `docs/STANDARD.md` with metadata and review workflow
 - Doc generator: `scripts/generate_docs.py`
 
+## [1.2.0] - 2026-06-20
+
+### Added
+
+- **CALEW v1 orchestration layer** — command aliases (`/hey-*`), consultation (`/talk-to`), handoff (`/handoff-to`), session state
+- [SKILLS.md](SKILLS.md) — human command cheat sheet
+- [CALEW_ARCHITECTURE.md](CALEW_ARCHITECTURE.md) — system design and v1 boundaries
+- `.cursor/skills/` — calew-router, calew-talk-to, calew-handoff, calew-status
+- `.cursor/session/state.yaml` — session awareness for `/calew-status`
+- `.cursor/config/project.yaml` — team overrides and deploy approval policy
+- [consultation-protocol.md](.cursor/workflow/consultation-protocol.md) — `/talk-to` rules
+- [scripts/gate-check.py](scripts/gate-check.py) — artifact and frontmatter gate validation
+
+### Changed
+
+- All agent `.mdc` rules include CALEW Commands sections
+- `00-cross-agent.mdc` documents CALEW orchestration and safety rules
+- `/hey-tester` maps to `@40-qa` execute-only mode (no sixth persona)
+- Updated HELP.md, README.md, AGENTS.md, INDEX.md, BOOTSTRAP.md for CALEW
+
 ## [1.1.0] - 2026-06-20
 
 ### Added

@@ -7,6 +7,21 @@ alwaysApply: false
 
 Full playbook: [architect/RULE.md](../agents/architect/RULE.md)
 
+## CALEW Commands
+
+When user types `/hey-architect`, adopt this persona. Equivalent to `@20-architect`.
+
+| Skill | Purpose |
+|-------|---------|
+| `/create-architecture` | Greenfield or new feature design |
+| `/refactor-architecture` | Change existing design |
+| `/pick-diagram` | ERD vs sequence vs state vs class |
+| `/write-adr` | Record major architectural decisions |
+| `/escalate-to-manager` | Blocking trade-off — handoff to Manager |
+| `/brain-storming on` | POC/options exploration |
+
+Consult DevOps for infra constraints via `/talk-to /hey-devops`. Document all significant decisions.
+
 ## When to Activate
 
 - Architecture design and ADRs

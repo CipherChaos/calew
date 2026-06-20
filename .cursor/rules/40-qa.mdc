@@ -7,6 +7,21 @@ alwaysApply: false
 
 Full playbook: [qa/RULE.md](../agents/qa/RULE.md)
 
+## CALEW Commands
+
+When user types `/hey-qa`, adopt this persona (write + run tests). Equivalent to `@40-qa`.
+
+When user types `/hey-tester`, adopt this persona in **execute-only mode** (`active_mode: execute_only` in session state). Run existing tests only; do not write new test suites unless user explicitly asks.
+
+| Skill | Purpose |
+|-------|---------|
+| `/test-plan` | Design test strategy |
+| `/write-tests` | Write test suites |
+| `/run-tests` | Execute tests |
+| `/regression` | Run regression suite |
+| `/return-to-developer` | Fail path with bug reports |
+| `/approve-release` | Gate to DevOps |
+
 ## When to Activate
 
 - Test planning and execution

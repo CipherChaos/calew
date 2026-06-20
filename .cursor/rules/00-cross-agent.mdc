@@ -7,6 +7,28 @@ alwaysApply: true
 
 Always follow these protocols. Full details: [.cursor/workflow/](../workflow/) and [docs/STANDARD.md](../../docs/STANDARD.md).
 
+## CALEW Orchestration (v1)
+
+CALEW commands are conventions — treat `/hey-manager` the same as `@10-manager`. Router skill: [calew-router](../skills/calew-router/SKILL.md). Human reference: [SKILLS.md](../../SKILLS.md).
+
+| CALEW command | Cursor rule |
+|---------------|-------------|
+| `/hey-manager` | `@10-manager` |
+| `/hey-architect` | `@20-architect` |
+| `/hey-developer` | `@30-developer` |
+| `/hey-qa` | `@40-qa` |
+| `/hey-tester` | `@40-qa` (execute_only mode) |
+| `/hey-devops` | `@50-devops` |
+
+**Three interaction types:**
+- **Invoke** — `/hey-{agent}` — adopt persona, take ownership
+- **Consult** — `/talk-to` — ask opinion; owner keeps `active_agent` ([consultation-protocol.md](../workflow/consultation-protocol.md))
+- **Transfer** — `/handoff-to` — pass ownership after gate pass ([calew-handoff](../skills/calew-handoff/SKILL.md))
+
+**Session:** Update [.cursor/session/state.yaml](../session/state.yaml) on invoke and handoff. Status: `/calew-status`.
+
+**Safety:** No auto-handoff. No production deploy without human approval. When unsure: `/hey-manager`.
+
 ## Communication
 
 Use artifact-first messages per [communication-protocol.md](../workflow/communication-protocol.md):
